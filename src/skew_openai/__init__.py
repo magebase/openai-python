@@ -23,30 +23,30 @@ from openai.types.chat import ChatCompletion
 
 __version__ = "1.0.0"
 
-# Configuration from environment
-SKEW_API_KEY = os.environ.get("SKEW_API_KEY", "")
-SKEW_TELEMETRY_ENDPOINT = os.environ.get(
-    "SKEW_TELEMETRY_ENDPOINT", "https://api.skew.ai/v1/telemetry"
-)
-SKEW_PROXY_ENABLED = os.environ.get("SKEW_PROXY_ENABLED", "").lower() == "true"
-SKEW_BASE_URL = os.environ.get("SKEW_BASE_URL", "https://api.skew.ai/v1/openai")
-
 
 class OpenAI(OriginalOpenAI):
     """SKEW-wrapped OpenAI client with telemetry and optional proxy routing"""
 
     def __init__(self, *args, **kwargs):
-        self.skew_api_key = SKEW_API_KEY
-        self.telemetry_enabled = bool(SKEW_API_KEY)
+        # Read configuration at init time, not module import time
+        self.skew_api_key = os.environ.get("SKEW_API_KEY", "")
+        self.telemetry_enabled = bool(self.skew_api_key)
         self.telemetry_buffer: List[Dict[str, Any]] = []
         self.flush_timer: Optional[Timer] = None
+        
+        skew_proxy_enabled = os.environ.get("SKEW_PROXY_ENABLED", "").lower() == "true"
+        skew_base_url = os.environ.get("SKEW_BASE_URL", "https://api.skew.ai/v1/openai")
+        skew_telemetry_endpoint = os.environ.get(
+            "SKEW_TELEMETRY_ENDPOINT", "https://api.skew.ai/v1/telemetry"
+        )
+        self.telemetry_endpoint = skew_telemetry_endpoint
 
         # If proxy is enabled, route through SKEW
-        if SKEW_PROXY_ENABLED and SKEW_API_KEY:
-            kwargs["base_url"] = SKEW_BASE_URL
+        if skew_proxy_enabled and self.skew_api_key:
+            kwargs["base_url"] = skew_base_url
             if "default_headers" not in kwargs:
                 kwargs["default_headers"] = {}
-            kwargs["default_headers"]["X-SKEW-API-Key"] = SKEW_API_KEY
+            kwargs["default_headers"]["X-SKEW-API-Key"] = self.skew_api_key
             original_api_key = kwargs.get("api_key", "")
             kwargs["default_headers"]["X-SKEW-Original-API-Key"] = original_api_key
 
@@ -150,7 +150,7 @@ class OpenAI(OriginalOpenAI):
 
         try:
             httpx.post(
-                SKEW_TELEMETRY_ENDPOINT,
+                self.telemetry_endpoint,
                 json={"events": batch},
                 headers={
                     "Content-Type": "application/json",
