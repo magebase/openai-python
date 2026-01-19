@@ -1,5 +1,5 @@
 """
-SKEW SDK Types
+langmesh SDK Types
 """
 
 from dataclasses import dataclass, field
@@ -16,7 +16,7 @@ class TelemetryConfig:
     sample_rate: float = 1.0
     batch_size: int = 10
     flush_interval_seconds: float = 5.0
-    endpoint: str = "https://api.skew.ai/v1/telemetry"
+    endpoint: str = "https://api.langmesh.ai/v1/telemetry"
 
 
 @dataclass
@@ -24,12 +24,12 @@ class ProxyConfig:
     """Proxy configuration"""
     enabled: bool = False
     fail_open: bool = True
-    base_url: str = "https://api.skew.ai/v1/openai"
+    base_url: str = "https://api.langmesh.ai/v1/openai"
     timeout_seconds: float = 30.0
 
 
 @dataclass
-class SkewConfig:
+class langmeshConfig:
     """Full SDK configuration"""
     api_key: str
     org_id: Optional[str] = None

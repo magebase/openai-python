@@ -1,5 +1,5 @@
 """
-SKEW OpenAI Wrapper
+langmesh OpenAI Wrapper
 
 Wraps the OpenAI client with telemetry and optional proxy support.
 
@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from typing import Any, Callable, Optional, TypeVar
 
 from .types import (
-    SkewConfig,
+    langmeshConfig,
     TelemetryConfig,
     ProxyConfig,
     TelemetryPayload,
@@ -35,7 +35,7 @@ T = TypeVar("T")
 SDK_VERSION = "1.0.0"
 
 
-class SkewWrapper:
+class langmeshWrapper:
     """Wrapper that adds telemetry and proxy support to OpenAI client"""
     
     def __init__(
@@ -51,7 +51,7 @@ class SkewWrapper:
         fail_open: bool = True,
     ):
         self._client = client
-        self._config = SkewConfig(
+        self._config = langmeshConfig(
             api_key=api_key,
             org_id=org_id,
             project_id=project_id,
@@ -90,9 +90,9 @@ class SkewWrapper:
             if self._proxy_active:
                 headers = kwargs.get("extra_headers", {})
                 headers.update({
-                    "X-SKEW-API-Key": self._config.api_key,
-                    "X-SKEW-Request-ID": request_id,
-                    "X-SKEW-Org-ID": self._config.org_id or "",
+                    "X-langmesh-API-Key": self._config.api_key,
+                    "X-langmesh-Request-ID": request_id,
+                    "X-langmesh-Org-ID": self._config.org_id or "",
                 })
                 kwargs["extra_headers"] = headers
             
@@ -247,7 +247,7 @@ class SkewWrapper:
 class _NamespaceWrapper:
     """Wrapper for OpenAI client namespaces (chat, completions, etc.)"""
     
-    def __init__(self, namespace: Any, parent: SkewWrapper):
+    def __init__(self, namespace: Any, parent: langmeshWrapper):
         self._namespace = namespace
         self._parent = parent
     
@@ -262,7 +262,7 @@ class _NamespaceWrapper:
         return attr
 
 
-def skew_wrap(
+def langmesh_wrap(
     client: T,
     api_key: str,
     org_id: Optional[str] = None,
@@ -274,11 +274,11 @@ def skew_wrap(
     fail_open: bool = True,
 ) -> T:
     """
-    Wrap an OpenAI client with SKEW telemetry and optional proxy.
+    Wrap an OpenAI client with langmesh telemetry and optional proxy.
     
     Args:
         client: The OpenAI client to wrap
-        api_key: SKEW API key
+        api_key: langmesh API key
         org_id: Organization ID (optional, auto-detected from key)
         project_id: Project ID for grouping (optional)
         telemetry_enabled: Enable telemetry (default: True)
@@ -290,7 +290,7 @@ def skew_wrap(
     Returns:
         Wrapped client that can be used exactly like the original
     """
-    return SkewWrapper(  # type: ignore
+    return langmeshWrapper(  # type: ignore
         client,
         api_key=api_key,
         org_id=org_id,

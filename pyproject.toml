@@ -3,11 +3,11 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "skew-openai"
+name = "langmesh-openai"
 version = "1.0.0"
-description = "SKEW-wrapped OpenAI client - drop-in replacement with telemetry and cost optimization"
+description = "langmesh-wrapped OpenAI client - drop-in replacement with telemetry and cost optimization"
 readme = "README.md"
-authors = [{name = "SKEW", email = "support@skew.ai"}]
+authors = [{name = "langmesh", email = "support@langmesh.ai"}]
 license = {text = "MIT"}
 requires-python = ">=3.8"
 classifiers = [
@@ -27,9 +27,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://skew.ai"
-Repository = "https://github.com/skew-ai/openai-python"
-Documentation = "https://docs.skew.ai"
+Homepage = "https://langmesh.ai"
+Repository = "https://github.com/langmesh-ai/openai-python"
+Documentation = "https://docs.langmesh.ai"
 
 [project.optional-dependencies]
 dev = [

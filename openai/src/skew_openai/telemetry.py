@@ -1,5 +1,5 @@
 """
-SKEW Telemetry Client
+langmesh Telemetry Client
 
 Async, non-blocking telemetry submission
 """
@@ -83,8 +83,8 @@ class TelemetryClient:
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
-            "X-SKEW-SDK-Version": "1.0.0",
-            "X-SKEW-SDK-Language": "python",
+            "X-langmesh-SDK-Version": "1.0.0",
+            "X-langmesh-SDK-Language": "python",
         }
         
         if HAS_HTTPX:

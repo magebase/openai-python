@@ -1,3 +1,30 @@
+Metadata-Version: 2.4
+Name: langmesh-openai
+Version: 1.0.0
+Summary: langmesh-wrapped OpenAI client - drop-in replacement with telemetry and cost optimization
+Author-email: langmesh <support@langmesh.ai>
+License: MIT
+Project-URL: Homepage, https://langmesh.ai
+Project-URL: Repository, https://github.com/langmesh-ai/openai-python
+Project-URL: Documentation, https://docs.langmesh.ai
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: openai>=1.0.0
+Requires-Dist: httpx>=0.25.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.11.1; extra == "dev"
+
 # langmesh-openai
 
 Drop-in replacement for the OpenAI Python client with automatic cost optimization and telemetry.

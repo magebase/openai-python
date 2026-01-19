@@ -1,14 +1,14 @@
 [project]
-name = "skew-openai"
+name = "langmesh-openai"
 version = "1.0.0"
-description = "SKEW SDK for OpenAI - Telemetry and cost optimization"
+description = "langmesh SDK for OpenAI - Telemetry and cost optimization"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.8"
 authors = [
-    { name = "SKEW", email = "support@skew.ai" }
+    { name = "langmesh", email = "support@langmesh.ai" }
 ]
-keywords = ["openai", "skew", "llm", "cost-optimization", "telemetry", "ai", "gpt"]
+keywords = ["openai", "langmesh", "llm", "cost-optimization", "telemetry", "ai", "gpt"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -23,10 +23,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://skew.ai"
-Documentation = "https://skew.ai/docs/sdk/python"
-Repository = "https://github.com/skew-ai/skew-sdks.git"
-Issues = "https://github.com/skew-ai/skew-sdks/issues"
+Homepage = "https://langmesh.ai"
+Documentation = "https://langmesh.ai/docs/sdk/python"
+Repository = "https://github.com/langmesh-ai/langmesh-sdks.git"
+Issues = "https://github.com/langmesh-ai/langmesh-sdks/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -44,7 +44,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/skew_openai"]
+packages = ["src/langmesh_openai"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

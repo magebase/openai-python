@@ -1,12 +1,12 @@
 """
-SKEW-wrapped OpenAI client - Drop-in replacement
+langmesh-wrapped OpenAI client - Drop-in replacement
 
 Usage:
     # Before
     from openai import OpenAI
     
     # After
-    from skew_openai import OpenAI
+    from langmesh_openai import OpenAI
     
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     # Works exactly the same!
@@ -25,30 +25,30 @@ __version__ = "1.0.0"
 
 
 class OpenAI(OriginalOpenAI):
-    """SKEW-wrapped OpenAI client with telemetry and optional proxy routing"""
+    """langmesh-wrapped OpenAI client with telemetry and optional proxy routing"""
 
     def __init__(self, *args, **kwargs):
         # Read configuration at init time, not module import time
-        self.skew_api_key = os.environ.get("SKEW_API_KEY", "")
-        self.telemetry_enabled = bool(self.skew_api_key)
+        self.langmesh_api_key = os.environ.get("langmesh_API_KEY", "")
+        self.telemetry_enabled = bool(self.langmesh_api_key)
         self.telemetry_buffer: List[Dict[str, Any]] = []
         self.flush_timer: Optional[Timer] = None
         
-        skew_proxy_enabled = os.environ.get("SKEW_PROXY_ENABLED", "").lower() == "true"
-        skew_base_url = os.environ.get("SKEW_BASE_URL", "https://api.skew.ai/v1/openai")
-        skew_telemetry_endpoint = os.environ.get(
-            "SKEW_TELEMETRY_ENDPOINT", "https://api.skew.ai/v1/telemetry"
+        langmesh_proxy_enabled = os.environ.get("langmesh_PROXY_ENABLED", "").lower() == "true"
+        langmesh_base_url = os.environ.get("langmesh_BASE_URL", "https://api.langmesh.ai/v1/openai")
+        langmesh_telemetry_endpoint = os.environ.get(
+            "langmesh_TELEMETRY_ENDPOINT", "https://api.langmesh.ai/v1/telemetry"
         )
-        self.telemetry_endpoint = skew_telemetry_endpoint
+        self.telemetry_endpoint = langmesh_telemetry_endpoint
 
-        # If proxy is enabled, route through SKEW
-        if skew_proxy_enabled and self.skew_api_key:
-            kwargs["base_url"] = skew_base_url
+        # If proxy is enabled, route through langmesh
+        if langmesh_proxy_enabled and self.langmesh_api_key:
+            kwargs["base_url"] = langmesh_base_url
             if "default_headers" not in kwargs:
                 kwargs["default_headers"] = {}
-            kwargs["default_headers"]["X-SKEW-API-Key"] = self.skew_api_key
+            kwargs["default_headers"]["X-langmesh-API-Key"] = self.langmesh_api_key
             original_api_key = kwargs.get("api_key", "")
-            kwargs["default_headers"]["X-SKEW-Original-API-Key"] = original_api_key
+            kwargs["default_headers"]["X-langmesh-Original-API-Key"] = original_api_key
 
         super().__init__(*args, **kwargs)
 
@@ -141,7 +141,7 @@ class OpenAI(OriginalOpenAI):
             self._flush_telemetry()
 
     def _flush_telemetry(self):
-        """Send telemetry batch to SKEW"""
+        """Send telemetry batch to langmesh"""
         if not self.telemetry_buffer:
             return
 
@@ -154,7 +154,7 @@ class OpenAI(OriginalOpenAI):
                 json={"events": batch},
                 headers={
                     "Content-Type": "application/json",
-                    "Authorization": f"Bearer {self.skew_api_key}",
+                    "Authorization": f"Bearer {self.langmesh_api_key}",
                 },
                 timeout=5.0,
             )
@@ -195,20 +195,20 @@ class OpenAI(OriginalOpenAI):
 
 # Async version
 class AsyncOpenAI(OriginalAsyncOpenAI):
-    """Async SKEW-wrapped OpenAI client"""
+    """Async langmesh-wrapped OpenAI client"""
 
     def __init__(self, *args, **kwargs):
-        self.skew_api_key = SKEW_API_KEY
-        self.telemetry_enabled = bool(SKEW_API_KEY)
+        self.langmesh_api_key = langmesh_API_KEY
+        self.telemetry_enabled = bool(langmesh_API_KEY)
         self.telemetry_buffer: List[Dict[str, Any]] = []
 
-        if SKEW_PROXY_ENABLED and SKEW_API_KEY:
-            kwargs["base_url"] = SKEW_BASE_URL
+        if langmesh_PROXY_ENABLED and langmesh_API_KEY:
+            kwargs["base_url"] = langmesh_BASE_URL
             if "default_headers" not in kwargs:
                 kwargs["default_headers"] = {}
-            kwargs["default_headers"]["X-SKEW-API-Key"] = SKEW_API_KEY
+            kwargs["default_headers"]["X-langmesh-API-Key"] = langmesh_API_KEY
             original_api_key = kwargs.get("api_key", "")
-            kwargs["default_headers"]["X-SKEW-Original-API-Key"] = original_api_key
+            kwargs["default_headers"]["X-langmesh-Original-API-Key"] = original_api_key
 
         super().__init__(*args, **kwargs)
 
